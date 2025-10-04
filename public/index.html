@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>جوان نویسان - ایده های نو با کدهای نو</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{box-sizing:border-box}</style>
+</head>
+<body class="light-mode">
+  <!-- The landing page is loaded from .landing.html for easier admin editing -->
+  <div id="app"></div>
+  <script>
+    // Inject the user-provided HTML into #app to keep edits simple
+    fetch('/landing.html').then(r => r.text()).then(html => {
+      document.getElementById('app').innerHTML = html;
+      wireForm();
+    });
+
+    // Rewire the form to submit to our backend
+    function wireForm() {
+      const form = document.getElementById('registrationForm');
+      if (!form) return;
+      form.removeAttribute('action');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const loadingText = document.getElementById('loadingText');
+        submitText?.classList.add('hidden');
+        loadingText?.classList.remove('hidden');
+        submitBtn && (submitBtn.disabled = true);
+
+        const formData = new FormData(form);
+        const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(i => i.value);
+        if (services.length === 0) {
+          alert('لطفاً حداقل یک خدمت انتخاب کنید');
+          submitText?.classList.remove('hidden');
+          loadingText?.classList.add('hidden');
+          submitBtn && (submitBtn.disabled = false);
+          return;
+        }
+        const payload = Object.fromEntries(formData.entries());
+        payload.services = services;
+
+        try {
+          const res = await fetch('/api/submit', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.ok) {
+            alert('ثبت شد! شماره مشتری: ' + data.customerNumber);
+            form.reset();
+          } else {
+            alert('خطا در ارسال فرم');
+          }
+        } catch (err) {
+          alert('خطا در اتصال به سرور');
+        } finally {
+          submitText?.classList.remove('hidden');
+          loadingText?.classList.add('hidden');
+          submitBtn && (submitBtn.disabled = false);
+        }
+      });
+    }
+    // Expose helpers used by the page
+    window.scrollToForm = function() {
+      const form = document.getElementById('registrationForm');
+      if (form) {
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    window.toggleTheme = function() {
+      const body = document.body;
+      const themeIcon = document.getElementById('theme-icon');
+      if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+        if (themeIcon) themeIcon.innerHTML = '<path d="M12,18.5A6.5,6.5 0 0,1 5.5,12A6.5,6.5 0 0,1 12,5.5A6.5,6.5 0 0,1 18.5,12A6.5,6.5 0 0,1 12,18.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>';
+      } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        if (themeIcon) themeIcon.innerHTML = '<path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>';
+      }
+    }
+  </script>
+</body>
+</html>

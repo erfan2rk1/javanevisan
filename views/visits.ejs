@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>بازدیدها</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-6xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">بازدیدها</h1>
+      <a href="/admin" class="px-3 py-2 bg-gray-800 text-white rounded">بازگشت</a>
+    </div>
+
+    <div class="bg-white rounded shadow p-4 overflow-x-auto">
+      <table class="min-w-full text-xs md:text-sm">
+        <thead>
+          <tr class="text-right">
+            <th class="p-2">#</th>
+            <th class="p-2">IP</th>
+            <th class="p-2">User-Agent</th>
+            <th class="p-2">Path</th>
+            <th class="p-2">زمان</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% rows.forEach(r => { %>
+            <tr class="border-t">
+              <td class="p-2"><%= r.id %></td>
+              <td class="p-2"><%= r.ip %></td>
+              <td class="p-2 break-all max-w-lg"><%= r.ua %></td>
+              <td class="p-2"><%= r.path %></td>
+              <td class="p-2"><%= r.ts %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
