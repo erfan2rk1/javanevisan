@@ -1,0 +1,985 @@
+<!-- این فیلدها باعث مشکل میشن -->
+<input type="hidden" name="customer-number" id="customerNumberField" />
+<input type="hidden" name="full-name" id="fullNameField" />
+<input type="hidden" name="selected-services" id="selectedServicesField" />
+<input type="hidden" name="submission-datetime" id="submissionDatetimeField" /><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جوان نویسان - ایده های نو با کدهای نو</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        :root {
+            --primary-light: #14b8a6;
+            --secondary-light: #ffffff;
+            --bg-light: #f8fafc;
+            --text-light: #1e293b;
+            --primary-dark: #8b5cf6;
+            --secondary-dark: #1e1b4b;
+            --bg-dark: #0f0f23;
+            --text-dark: #e2e8f0;
+        }
+        
+        .light-mode {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --bg: var(--bg-light);
+            --text: var(--text-light);
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+        
+        .dark-mode {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --bg: var(--bg-dark);
+            --text: var(--text-dark);
+            --card-bg: #1e1b4b;
+            --border: #374151;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .rotate-3d {
+            transition: transform 0.3s ease;
+        }
+        
+        .rotate-3d:hover {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+        
+        .service-card {
+            perspective: 1000px;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        @media (max-width: 768px) {
+            .service-card:hover {
+                transform: translateY(-5px) scale(1.01);
+            }
+            
+            .floating {
+                animation: float 2s ease-in-out infinite;
+            }
+            
+            .logo-bubble {
+                animation: bubble-float 3s ease-in-out infinite, bubble-glow 2s ease-in-out infinite alternate;
+            }
+        }
+        
+        .icon-3d {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .logo-bubble {
+            position: relative;
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+            animation: bubble-float 4s ease-in-out infinite, bubble-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes bubble-float {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+            }
+            25% { 
+                transform: translateY(-8px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(20, 184, 166, 0.6);
+            }
+            50% { 
+                transform: translateY(-12px) scale(1.1);
+                box-shadow: 0 12px 30px rgba(20, 184, 166, 0.8);
+            }
+            75% { 
+                transform: translateY(-8px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(20, 184, 166, 0.6);
+            }
+        }
+        
+        @keyframes bubble-glow {
+            0% { 
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            100% { 
+                box-shadow: 0 0 40px rgba(20, 184, 166, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.3);
+            }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+        
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <!-- Header -->
+    <header class="card sticky top-0 z-50 shadow-lg">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="logo-bubble w-16 h-16 rounded-full gradient-bg flex items-center justify-center floating relative overflow-hidden">
+                        <img src="https://i.postimg.cc/9znrzT3Y/logo.png" alt="جوان نویسان" class="w-12 h-12 rounded-full object-cover animate-pulse" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <svg class="w-8 h-8 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                        </svg>
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-spin-slow"></div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold" style="color: var(--primary)">جوان نویسان</h1>
+                        <p class="text-sm opacity-75">ایده های نو با کدهای نو</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <button onclick="toggleTheme()" class="p-3 rounded-full card hover:scale-110 transition-transform" aria-label="تغییر تم">
+                        <svg id="theme-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>
+                        </svg>
+                    </button>
+                    <button onclick="scrollToForm()" class="btn-primary px-6 py-2 rounded-full font-medium">
+                        تماس با ما
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-20 gradient-bg text-white">
+        <div class="container mx-auto px-6 text-center">
+            <div class="slide-in">
+                <h2 class="text-5xl font-bold mb-6 floating">خدمات تخصصی فناوری و نوآوری</h2>
+                <p class="text-xl mb-8 opacity-90">از ایده تا پیاده‌سازی، همراه شما هستیم</p>
+                <div class="flex justify-center space-x-6 space-x-reverse mb-8">
+                    <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 0s">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                        </svg>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 0.5s">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                        </svg>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 1s">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"/>
+                        </svg>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 1.5s">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M5,16L3,5H1V3H4L6,14H18.5L19.5,11H21.5L20,16H5Z M6,20A2,2 0 0,1 8,22A2,2 0 0,1 6,20Z M16,20A2,2 0 0,1 18,22A2,2 0 0,1 16,20Z"/>
+                        </svg>
+                    </div>
+                </div>
+                <button onclick="scrollToForm()" class="bg-white text-gray-800 px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                    شروع همکاری
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <h3 class="text-4xl font-bold text-center mb-16 slide-in" style="color: var(--primary)">خدمات ما</h3>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Programming Service -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));">
+                                <defs>
+                                    <linearGradient id="codeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <rect x="10" y="15" width="80" height="60" rx="8" fill="url(#codeGrad)" transform="perspective(100) rotateX(15deg)"/>
+                                <rect x="15" y="25" width="15" height="3" fill="white" opacity="0.9"/>
+                                <rect x="35" y="25" width="25" height="3" fill="white" opacity="0.7"/>
+                                <rect x="15" y="35" width="35" height="3" fill="white" opacity="0.8"/>
+                                <rect x="55" y="35" width="20" height="3" fill="white" opacity="0.6"/>
+                                <rect x="15" y="45" width="20" height="3" fill="white" opacity="0.9"/>
+                                <rect x="40" y="45" width="30" height="3" fill="white" opacity="0.7"/>
+                                <circle cx="20" cy="55" r="2" fill="#10b981"/>
+                                <circle cx="30" cy="55" r="2" fill="#f59e0b"/>
+                                <circle cx="40" cy="55" r="2" fill="#ef4444"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">برنامه نویسی</h4>
+                        <p class="text-center mb-6 opacity-80">توسعه نرم‌افزار و اپلیکیشن‌های تحت وب و موبایل</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">توافقی</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">متناسب با پروژه</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patent Registration -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); animation-delay: 0.2s;">
+                                <defs>
+                                    <linearGradient id="patentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <rect x="25" y="10" width="50" height="70" rx="5" fill="url(#patentGrad)" transform="perspective(100) rotateY(-10deg)"/>
+                                <rect x="30" y="20" width="40" height="3" fill="white" opacity="0.9"/>
+                                <rect x="30" y="30" width="35" height="2" fill="white" opacity="0.7"/>
+                                <rect x="30" y="37" width="30" height="2" fill="white" opacity="0.7"/>
+                                <rect x="30" y="44" width="25" height="2" fill="white" opacity="0.7"/>
+                                <circle cx="50" cy="55" r="8" fill="white" opacity="0.2"/>
+                                <path d="M45 55 L48 58 L55 51" stroke="white" stroke-width="2" fill="none"/>
+                                <rect x="30" y="68" width="20" height="2" fill="white" opacity="0.8"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">ثبت اختراع</h4>
+                        <p class="text-center mb-6 opacity-80">ثبت و حمایت از ایده‌ها و اختراعات شما</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">توافقی</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">۳-۸ هفته</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Writing -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); animation-delay: 0.4s;">
+                                <defs>
+                                    <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <rect x="20" y="15" width="45" height="60" rx="3" fill="url(#bookGrad)" transform="perspective(100) rotateY(15deg)"/>
+                                <rect x="22" y="17" width="41" height="56" rx="2" fill="white" opacity="0.9"/>
+                                <rect x="25" y="25" width="35" height="2" fill="var(--primary)" opacity="0.8"/>
+                                <rect x="25" y="32" width="30" height="1.5" fill="var(--primary)" opacity="0.6"/>
+                                <rect x="25" y="38" width="32" height="1.5" fill="var(--primary)" opacity="0.6"/>
+                                <rect x="25" y="44" width="28" height="1.5" fill="var(--primary)" opacity="0.6"/>
+                                <rect x="25" y="50" width="33" height="1.5" fill="var(--primary)" opacity="0.6"/>
+                                <rect x="25" y="56" width="25" height="1.5" fill="var(--primary)" opacity="0.6"/>
+                                <rect x="25" y="62" width="30" height="1.5" fill="var(--primary)" opacity="0.6"/>
+                                <rect x="65" y="15" width="5" height="60" fill="#d97706"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">تألیف کتاب</h4>
+                        <p class="text-center mb-6 opacity-80">نگارش و تألیف کتاب‌های تخصصی و علمی</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">از ۷ میلیون تومان</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">۱-۲ ماه</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Articles -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); animation-delay: 0.6s;">
+                                <defs>
+                                    <linearGradient id="researchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="35" r="20" fill="url(#researchGrad)" opacity="0.2"/>
+                                <circle cx="50" cy="35" r="15" fill="url(#researchGrad)" opacity="0.4"/>
+                                <circle cx="50" cy="35" r="10" fill="url(#researchGrad)"/>
+                                <rect x="60" y="45" width="25" height="4" rx="2" fill="url(#researchGrad)" transform="rotate(45 72.5 47)"/>
+                                <circle cx="72" cy="57" r="8" fill="white" opacity="0.9"/>
+                                <circle cx="72" cy="57" r="5" fill="none" stroke="var(--primary)" stroke-width="2"/>
+                                <rect x="25" y="65" width="50" height="3" fill="var(--primary)" opacity="0.8"/>
+                                <rect x="30" y="72" width="40" height="2" fill="var(--primary)" opacity="0.6"/>
+                                <rect x="35" y="78" width="30" height="2" fill="var(--primary)" opacity="0.6"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">مقالات پژوهشی</h4>
+                        <p class="text-center mb-6 opacity-80">نگارش مقالات علمی پژوهشی و ترویجی</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">از ۲ میلیون تومان</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">۲-۴ هفته</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conference Papers -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); animation-delay: 0.8s;">
+                                <defs>
+                                    <linearGradient id="confGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <rect x="15" y="25" width="70" height="45" rx="5" fill="url(#confGrad)" opacity="0.9"/>
+                                <rect x="20" y="30" width="60" height="35" rx="3" fill="white"/>
+                                <circle cx="35" cy="42" r="3" fill="var(--primary)"/>
+                                <circle cx="50" cy="42" r="3" fill="var(--primary)"/>
+                                <circle cx="65" cy="42" r="3" fill="var(--primary)"/>
+                                <rect x="25" y="52" width="50" height="2" fill="var(--primary)" opacity="0.7"/>
+                                <rect x="30" y="58" width="40" height="1.5" fill="var(--primary)" opacity="0.5"/>
+                                <polygon points="50,15 45,25 55,25" fill="#fbbf24"/>
+                                <rect x="48" y="10" width="4" height="8" fill="#fbbf24"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">مقالات کنفرانس</h4>
+                        <p class="text-center mb-6 opacity-80">نگارش مقاله برای سمینارهای ملی و بین‌المللی</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">از ۱.۵ میلیون تومان</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">۱-۳ هفته</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Science Park Consulting -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); animation-delay: 1s;">
+                                <defs>
+                                    <linearGradient id="parkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <rect x="20" y="40" width="60" height="35" rx="3" fill="url(#parkGrad)"/>
+                                <rect x="25" y="35" width="50" height="8" rx="4" fill="#e5e7eb"/>
+                                <rect x="30" y="25" width="40" height="15" rx="2" fill="url(#parkGrad)" opacity="0.8"/>
+                                <rect x="35" y="15" width="30" height="15" rx="2" fill="url(#parkGrad)" opacity="0.6"/>
+                                <rect x="40" y="5" width="20" height="15" rx="2" fill="url(#parkGrad)" opacity="0.4"/>
+                                <circle cx="35" cy="50" r="2" fill="white"/>
+                                <circle cx="45" cy="50" r="2" fill="white"/>
+                                <circle cx="55" cy="50" r="2" fill="white"/>
+                                <circle cx="65" cy="50" r="2" fill="white"/>
+                                <rect x="32" y="60" width="6" height="8" fill="white" opacity="0.9"/>
+                                <rect x="42" y="60" width="6" height="8" fill="white" opacity="0.9"/>
+                                <rect x="52" y="60" width="6" height="8" fill="white" opacity="0.9"/>
+                                <rect x="62" y="60" width="6" height="8" fill="white" opacity="0.9"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">مشاوره پارک علم</h4>
+                        <p class="text-center mb-6 opacity-80">مشاوره ورود به پارک‌های علم و فناوری</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">۵۰۰ هزار تومان</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">در سریع‌ترین لحظه</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brand Registration -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); animation-delay: 1.2s;">
+                                <defs>
+                                    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="40" r="25" fill="url(#brandGrad)" opacity="0.2"/>
+                                <circle cx="50" cy="40" r="20" fill="url(#brandGrad)" opacity="0.4"/>
+                                <circle cx="50" cy="40" r="15" fill="url(#brandGrad)"/>
+                                <path d="M42 35 L47 40 L58 29" stroke="white" stroke-width="3" fill="none"/>
+                                <rect x="35" y="65" width="30" height="8" rx="4" fill="url(#brandGrad)" opacity="0.8"/>
+                                <rect x="40" y="68" width="20" height="2" fill="white"/>
+                                <polygon points="25,75 35,65 35,85" fill="#fbbf24"/>
+                                <polygon points="75,75 65,65 65,85" fill="#fbbf24"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">ثبت برند</h4>
+                        <p class="text-center mb-6 opacity-80">انجام روند ثبت برند صنعتی و تجاری</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">توافقی</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">۶-۱۰ هفته</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consultation -->
+                <div class="service-card card rounded-3xl p-8 rotate-3d overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-2 gradient-bg"></div>
+                    <div class="relative z-10">
+                        <div class="w-20 h-20 mx-auto mb-6 relative">
+                            <svg class="w-full h-full floating" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); animation-delay: 1.4s;">
+                                <defs>
+                                    <linearGradient id="consultGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="35" r="18" fill="url(#consultGrad)"/>
+                                <circle cx="50" cy="35" r="12" fill="white" opacity="0.9"/>
+                                <path d="M45 30 Q50 25 55 30 Q50 35 45 30" fill="url(#consultGrad)"/>
+                                <ellipse cx="50" cy="65" rx="25" ry="15" fill="url(#consultGrad)" opacity="0.3"/>
+                                <rect x="40" y="55" width="20" height="15" rx="3" fill="url(#consultGrad)" opacity="0.8"/>
+                                <circle cx="35" cy="25" r="3" fill="#fbbf24" opacity="0.8"/>
+                                <circle cx="30" cy="35" r="2" fill="#fbbf24" opacity="0.6"/>
+                                <circle cx="70" cy="30" r="2.5" fill="#fbbf24" opacity="0.7"/>
+                                <circle cx="75" cy="40" r="2" fill="#fbbf24" opacity="0.5"/>
+                                <path d="M35 25 Q40 20 45 25" stroke="#fbbf24" stroke-width="1" fill="none" opacity="0.6"/>
+                                <path d="M70 30 Q65 25 60 30" stroke="#fbbf24" stroke-width="1" fill="none" opacity="0.6"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-bold mb-4 text-center" style="color: var(--primary)">مشاوره تخصصی</h4>
+                        <p class="text-center mb-6 opacity-80">مشاوره در زمینه فناوری و نوآوری</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">💰</span>قیمت:</span>
+                                <span class="font-bold" style="color: var(--primary)">از ۵۰۰ هزار تومان</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 rounded-lg" style="background: rgba(20, 184, 166, 0.1);">
+                                <span class="flex items-center"><span class="text-lg ml-2">⏱️</span>زمان تحویل:</span>
+                                <span class="font-bold" style="color: var(--primary)">۱-۲ هفته</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-20 gradient-bg text-white">
+        <div class="container mx-auto px-6">
+            <h3 class="text-4xl font-bold text-center mb-16">چرا جوان نویسان؟</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center slide-in glass-effect rounded-2xl p-8">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M13,1L15.5,7.5L22,10L15.5,12.5L13,19L10.5,12.5L4,10L10.5,7.5L13,1Z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">🚀 نوآوری مداوم</h4>
+                    <p class="opacity-90 text-sm leading-relaxed">ما همیشه در خط مقدم فناوری قرار داریم! از هوش مصنوعی تا بلاک چین، از متاورس تا اینترنت اشیاء - تکنولوژی‌های آینده را امروز به دست شما می‌آوریم</p>
+                </div>
+                <div class="text-center slide-in glass-effect rounded-2xl p-8">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 0.3s">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">💎 کیفیت الماسی</h4>
+                    <p class="opacity-90 text-sm leading-relaxed">هر پروژه برای ما مثل الماس است! با ۱۵ مرحله کنترل کیفیت، تست‌های چندگانه و بررسی‌های دقیق، محصولی بی‌نقص تحویل می‌دهیم که حتی خودمان هم از آن تعریف کنیم</p>
+                </div>
+                <div class="text-center slide-in glass-effect rounded-2xl p-8">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 0.6s">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,12.5A1.5,1.5 0 0,1 10.5,11A1.5,1.5 0 0,1 12,9.5A1.5,1.5 0 0,1 13.5,11A1.5,1.5 0 0,1 12,12.5M12,7.2C9.9,7.2 8.2,8.9 8.2,11C8.2,14 12,17.5 12,17.5C12,17.5 15.8,14 15.8,11C15.8,8.9 14.1,7.2 12,7.2Z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">🎯 دقت جراحی</h4>
+                    <p class="opacity-90 text-sm leading-relaxed">مثل یک جراح ماهر، هر خط کد، هر کلمه و هر طراحی را با دقت نانومتری انجام می‌دهیم. استانداردهای بین‌المللی IEEE، ISO و ACM راهنمای ما هستند</p>
+                </div>
+                <div class="text-center slide-in glass-effect rounded-2xl p-8">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 0.9s">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,1L9,9L1,12L9,15L12,23L15,15L23,12L15,9L12,1Z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">🤝 همراهی ابدی</h4>
+                    <p class="opacity-90 text-sm leading-relaxed">ما فقط یک شرکت نیستیم، بلکه شریک زندگی شما هستیم! حتی بعد از ۱۰ سال هم اگر مشکلی داشتید، کافیه زنگ بزنید. پشتیبانی ۲۴/۷ ما همیشه پای کار است</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <div class="text-6xl mb-6 floating">📝</div>
+                    <h3 class="text-4xl font-bold mb-4" style="color: var(--primary)">فرم ثبت نام</h3>
+                    <p class="text-lg opacity-80">اطلاعات خود را وارد کنید تا با شما تماس بگیریم</p>
+                </div>
+
+                <div class="card rounded-3xl p-8 md:p-12 rotate-3d">
+                    <form id="registrationForm" class="space-y-6" action="https://formsubmit.co/ebrahimierfan@gmail.com" method="POST">
+                        <!-- FormSubmit Configuration -->
+                        <input type="hidden" name="_subject" value="🎯 درخواست جدید از جوان نویسان" />
+                        <input type="hidden" name="_template" value="table" />
+                        <input type="hidden" name="_captcha" value="false" />
+                        <input type="hidden" name="_autoresponse" value="سلام! درخواست شما با موفقیت دریافت شد. به زودی با شما تماس خواهیم گرفت." />
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Name -->
+                            <div class="form-group">
+                                <label class="block text-sm font-medium mb-2" style="color: var(--primary)">
+                                    👤 نام و نام خانوادگی
+                                </label>
+                                <input type="text" id="name" name="name" required
+                                    class="w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 focus:scale-105 focus:shadow-lg"
+                                    style="border-color: var(--border); background: var(--card-bg); color: var(--text);"
+                                    placeholder="نام و نام خانوادگی خود را وارد کنید">
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="form-group">
+                                <label class="block text-sm font-medium mb-2" style="color: var(--primary)">
+                                    📱 شماره تماس
+                                </label>
+                                <input type="tel" id="phone" name="phone" required
+                                    class="w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 focus:scale-105 focus:shadow-lg"
+                                    style="border-color: var(--border); background: var(--card-bg); color: var(--text);"
+                                    placeholder="09xxxxxxxxx">
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label class="block text-sm font-medium mb-2" style="color: var(--primary)">
+                                📧 ایمیل
+                            </label>
+                            <input type="email" id="email" name="email" required
+                                class="w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 focus:scale-105 focus:shadow-lg"
+                                style="border-color: var(--border); background: var(--card-bg); color: var(--text);"
+                                placeholder="example@email.com">
+                        </div>
+
+                        <!-- Services -->
+                        <div class="form-group">
+                            <label class="block text-sm font-medium mb-4" style="color: var(--primary)">
+                                🛠️ خدمات مورد نظر (می‌توانید چند مورد انتخاب کنید)
+                            </label>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="برنامه نویسی" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>💻 برنامه نویسی</span>
+                                </label>
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="ثبت اختراع" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>📋 ثبت اختراع</span>
+                                </label>
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="تألیف کتاب" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>📚 تألیف کتاب</span>
+                                </label>
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="مقالات پژوهشی" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>🔬 مقالات پژوهشی</span>
+                                </label>
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="مقالات کنفرانس" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>🎯 مقالات کنفرانس</span>
+                                </label>
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="مشاوره پارک علم" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>🏢 مشاوره پارک علم</span>
+                                </label>
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="ثبت برند" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>🏷️ ثبت برند</span>
+                                </label>
+                                <label class="flex items-center space-x-3 space-x-reverse p-3 rounded-xl border-2 cursor-pointer hover:scale-105 transition-all duration-300 service-checkbox"
+                                    style="border-color: var(--border);">
+                                    <input type="checkbox" name="services" value="مشاوره تخصصی" class="w-5 h-5 rounded" style="accent-color: var(--primary);">
+                                    <span>💡 مشاوره تخصصی</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="form-group">
+                            <label class="block text-sm font-medium mb-2" style="color: var(--primary)">
+                                💬 توضیحات اضافی (اختیاری)
+                            </label>
+                            <textarea id="message" name="message" rows="4"
+                                class="w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 focus:scale-105 focus:shadow-lg resize-none"
+                                style="border-color: var(--border); background: var(--card-bg); color: var(--text);"
+                                placeholder="توضیحات بیشتر در مورد پروژه خود بنویسید..."></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center pt-6">
+                            <button type="submit" id="submitBtn"
+                                class="btn-primary px-12 py-4 rounded-2xl font-bold text-lg hover:scale-110 transition-all duration-300 shadow-lg">
+                                <span id="submitText">🚀 ارسال درخواست</span>
+                                <span id="loadingText" class="hidden">⏳ در حال ارسال...</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Info Section -->
+    <section class="py-20 gradient-bg text-white">
+        <div class="container mx-auto px-6">
+            <h3 class="text-4xl font-bold text-center mb-16">راه‌های ارتباطی</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center slide-in glass-effect rounded-2xl p-6">
+                    <div class="text-5xl mb-4 floating">📱</div>
+                    <h4 class="text-xl font-bold mb-2">تلفن</h4>
+                    <p class="opacity-90">09368169028</p>
+                </div>
+                <div class="text-center slide-in glass-effect rounded-2xl p-6">
+                    <div class="text-5xl mb-4 floating" style="animation-delay: 0.3s">📧</div>
+                    <h4 class="text-xl font-bold mb-2">ایمیل</h4>
+                    <p class="opacity-90">ebrahimierfan@gmail.com</p>
+                </div>
+                <div class="text-center slide-in glass-effect rounded-2xl p-6">
+                    <div class="text-5xl mb-4 floating" style="animation-delay: 0.6s">📍</div>
+                    <h4 class="text-xl font-bold mb-2">آدرس</h4>
+                    <p class="opacity-90">اردبیل، خیابان کارشناسان</p>
+                </div>
+                <div class="text-center slide-in glass-effect rounded-2xl p-6">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating" style="animation-delay: 0.9s">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">شبکه‌های اجتماعی</h4>
+                    <div class="space-y-3">
+                        <a href="https://instagram.com/_ebrahimi.erfan" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 space-x-reverse bg-white bg-opacity-10 rounded-lg p-2 hover:bg-opacity-20 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/>
+                            </svg>
+                            <span>@_ebrahimi.erfan</span>
+                        </a>
+                        <a href="https://t.me/javan_nevisan" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 space-x-reverse bg-white bg-opacity-10 rounded-lg p-2 hover:bg-opacity-20 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z"/>
+                            </svg>
+                            <span>@javan_nevisan</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="card py-12 mt-20">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex justify-center items-center mb-6">
+                <div class="logo-bubble w-14 h-14 rounded-full gradient-bg flex items-center justify-center floating ml-4 relative overflow-hidden">
+                    <img src="https://i.postimg.cc/9znrzT3Y/logo.png" alt="جوان نویسان" class="w-10 h-10 rounded-full object-cover animate-pulse" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="w-6 h-6 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                    </svg>
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-spin-slow"></div>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold" style="color: var(--primary)">جوان نویسان</h4>
+                    <p class="opacity-75">ایده های نو با کدهای نو</p>
+                </div>
+            </div>
+            <p class="opacity-60">© ۱۴۰۳ جوان نویسان. تمامی حقوق محفوظ است.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                themeIcon.innerHTML = '<path d="M12,18.5A6.5,6.5 0 0,1 5.5,12A6.5,6.5 0 0,1 12,5.5A6.5,6.5 0 0,1 18.5,12A6.5,6.5 0 0,1 12,18.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>';
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                themeIcon.innerHTML = '<path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>';
+            }
+        }
+
+        function scrollToForm() {
+            const formSection = document.querySelector('#registrationForm').closest('section');
+            formSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('slide-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll to form for all CTA buttons
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.includes('تماس') || button.textContent.includes('شروع') || button.textContent.includes('همکاری')) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    scrollToForm();
+                });
+            }
+        });
+
+        // Form submission handler
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const loadingText = document.getElementById('loadingText');
+            
+            // Show loading state
+            submitText.classList.add('hidden');
+            loadingText.classList.remove('hidden');
+            submitBtn.disabled = true;
+            
+            // Get selected services
+            const selectedServices = [];
+            const serviceCheckboxes = document.querySelectorAll('input[name="services"]:checked');
+            serviceCheckboxes.forEach(checkbox => {
+                selectedServices.push(checkbox.value);
+            });
+            
+            if (selectedServices.length === 0) {
+                e.preventDefault();
+                alert('لطفاً حداقل یک خدمت انتخاب کنید');
+                submitText.classList.remove('hidden');
+                loadingText.classList.add('hidden');
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            // Generate customer number and add to form
+            const customerNumber = 'JN' + Date.now().toString().slice(-6);
+            const customerField = document.createElement('input');
+            customerField.type = 'hidden';
+            customerField.name = 'customer-number';
+            customerField.value = customerNumber;
+            this.appendChild(customerField);
+            
+            const dateField = document.createElement('input');
+            dateField.type = 'hidden';
+            dateField.name = 'submission-date';
+            dateField.value = new Date().toLocaleString('fa-IR');
+            this.appendChild(dateField);
+            
+            // Let the form submit naturally to FormSubmit
+            // FormSubmit will handle the redirect and email sending
+        });
+
+        // Show success message function
+        function showSuccessMessage(customerNumber, selectedServices) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="card rounded-3xl p-8 max-w-md w-full text-center">
+                    <div class="text-6xl mb-6 floating">✅</div>
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--primary)">درخواست ثبت شد!</h3>
+                    <div class="space-y-3 mb-6 text-right">
+                        <p class="flex items-center justify-center space-x-2 space-x-reverse">
+                            <span>🎫</span>
+                            <span>شماره مشتری: ${customerNumber}</span>
+                        </p>
+                        <p class="flex items-center justify-center space-x-2 space-x-reverse">
+                            <span>📧</span>
+                            <span>اطلاعات شما مستقیماً ایمیل شد</span>
+                        </p>
+                        <p class="flex items-center justify-center space-x-2 space-x-reverse">
+                            <span>🛠️</span>
+                            <span>خدمات: ${selectedServices.join('، ')}</span>
+                        </p>
+                        <p class="flex items-center justify-center space-x-2 space-x-reverse">
+                            <span>📞</span>
+                            <span>به زودی با شما تماس خواهیم گرفت</span>
+                        </p>
+                        <p class="flex items-center justify-center space-x-2 space-x-reverse">
+                            <span>⏰</span>
+                            <span>پاسخ در کمتر از 24 ساعت</span>
+                        </p>
+                    </div>
+                    <button onclick="closeSuccessModal()" class="btn-primary px-8 py-3 rounded-2xl font-bold">
+                        عالی! 🎉
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Auto close after 8 seconds
+            setTimeout(() => {
+                closeSuccessModal();
+            }, 8000);
+        }
+        
+        // Close success modal
+        function closeSuccessModal() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+
+
+        // Add input focus animations
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary)';
+                this.style.boxShadow = '0 0 0 3px rgba(20, 184, 166, 0.1)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.borderColor = 'var(--border)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
