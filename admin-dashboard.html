@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد مدیریت - جوان نویسان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        :root {
+            --primary-light: #14b8a6;
+            --secondary-light: #ffffff;
+            --bg-light: #f8fafc;
+            --text-light: #1e293b;
+            --primary-dark: #8b5cf6;
+            --secondary-dark: #1e1b4b;
+            --bg-dark: #0f0f23;
+            --text-dark: #e2e8f0;
+        }
+        
+        .light-mode {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --bg: var(--bg-light);
+            --text: var(--text-light);
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+        
+        .dark-mode {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --bg: var(--bg-dark);
+            --text: var(--text-dark);
+            --card-bg: #1e1b4b;
+            --border: #374151;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo-bubble {
+            position: relative;
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+            animation: bubble-float 4s ease-in-out infinite, bubble-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes bubble-float {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+            }
+            25% { 
+                transform: translateY(-8px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(20, 184, 166, 0.6);
+            }
+            50% { 
+                transform: translateY(-12px) scale(1.1);
+                box-shadow: 0 12px 30px rgba(20, 184, 166, 0.8);
+            }
+            75% { 
+                transform: translateY(-8px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(20, 184, 166, 0.6);
+            }
+        }
+        
+        @keyframes bubble-glow {
+            0% { 
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            100% { 
+                box-shadow: 0 0 40px rgba(20, 184, 166, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.3);
+            }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+        
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .customer-row {
+            transition: all 0.3s ease;
+        }
+        
+        .customer-row:hover {
+            background: rgba(20, 184, 166, 0.05);
+            transform: translateX(-5px);
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-new {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-contact {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        
+        .main-content {
+            transition: all 0.3s ease;
+        }
+        
+        .main-content.expanded {
+            margin-right: 80px;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar fixed right-0 top-0 h-full w-64 gradient-bg shadow-2xl z-40">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3 space-x-reverse mb-8">
+                <div class="logo-bubble w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center floating relative overflow-hidden">
+                    <img src="https://i.postimg.cc/9znrzT3Y/logo.png" alt="جوان نویسان" class="w-8 h-8 rounded-full object-cover animate-pulse" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="w-6 h-6 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                    </svg>
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-spin-slow"></div>
+                </div>
+                <div class="sidebar-text">
+                    <h2 class="text-white font-bold text-lg">پنل مدیریت</h2>
+                    <p class="text-white text-opacity-75 text-sm">جوان نویسان</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="#dashboard" onclick="showSection('dashboard')" class="nav-item flex items-center space-x-3 space-x-reverse p-3 rounded-xl text-white hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z"/>
+                    </svg>
+                    <span class="sidebar-text">داشبورد</span>
+                </a>
+                <a href="#customers" onclick="showSection('customers')" class="nav-item flex items-center space-x-3 space-x-reverse p-3 rounded-xl text-white hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16,4C18.21,4 20,5.79 20,8C20,10.21 18.21,12 16,12C13.79,12 12,10.21 12,8C12,5.79 13.79,4 16,4M16,14C20.42,14 24,15.79 24,18V20H8V18C8,15.79 11.58,14 16,14M4,12C6.21,12 8,13.79 8,16C8,18.21 6.21,20 4,20C1.79,20 0,18.21 0,16C0,13.79 1.79,12 4,12M4,22C8.42,22 12,23.79 12,26V28H-4V26C-4,23.79 -0.42,22 4,22Z"/>
+                    </svg>
+                    <span class="sidebar-text">مشتری‌ها</span>
+                    <span id="customerCount" class="sidebar-text bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-auto">0</span>
+                </a>
+                <a href="#edit-site" onclick="showSection('edit-site')" class="nav-item flex items-center space-x-3 space-x-reverse p-3 rounded-xl text-white hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+                    </svg>
+                    <span class="sidebar-text">ویرایش سایت</span>
+                </a>
+                <a href="#settings" onclick="showSection('settings')" class="nav-item flex items-center space-x-3 space-x-reverse p-3 rounded-xl text-white hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+                    </svg>
+                    <span class="sidebar-text">تنظیمات</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="absolute bottom-6 right-6 left-6">
+            <button onclick="toggleSidebar()" class="w-full p-3 rounded-xl bg-white bg-opacity-20 text-white hover:bg-opacity-30 transition-all duration-300">
+                <svg class="w-5 h-5 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"/>
+                </svg>
+            </button>
+            <button onclick="logout()" class="w-full mt-2 p-3 rounded-xl bg-red-500 bg-opacity-80 text-white hover:bg-opacity-100 transition-all duration-300">
+                <svg class="w-5 h-5 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content mr-64 transition-all duration-300">
+        <!-- Header -->
+        <header class="card sticky top-0 z-30 shadow-lg">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold" style="color: var(--primary)">داشبورد مدیریت</h1>
+                        <p class="text-sm opacity-75">خوش آمدید به پنل مدیریت جوان نویسان</p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <button onclick="toggleTheme()" class="p-3 rounded-full card hover:scale-110 transition-transform" aria-label="تغییر تم">
+                            <svg id="theme-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>
+                            </svg>
+                        </button>
+                        <a href="index.html" class="btn-primary px-6 py-2 rounded-full font-medium">
+                            مشاهده سایت
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="p-6">
+            <!-- Stats Cards -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-4">👥</div>
+                    <h3 class="text-2xl font-bold mb-2" style="color: var(--primary)">کل مشتری‌ها</h3>
+                    <p id="totalCustomers" class="text-3xl font-bold">0</p>
+                </div>
+                <div class="stat-card card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-4">🆕</div>
+                    <h3 class="text-2xl font-bold mb-2" style="color: var(--primary)">درخواست‌های جدید</h3>
+                    <p id="newRequests" class="text-3xl font-bold">0</p>
+                </div>
+                <div class="stat-card card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-4">📞</div>
+                    <h3 class="text-2xl font-bold mb-2" style="color: var(--primary)">تماس‌های امروز</h3>
+                    <p id="todayContacts" class="text-3xl font-bold">0</p>
+                </div>
+                <div class="stat-card card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-4">✅</div>
+                    <h3 class="text-2xl font-bold mb-2" style="color: var(--primary)">پروژه‌های تکمیل شده</h3>
+                    <p id="completedProjects" class="text-3xl font-bold">0</p>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card rounded-2xl p-6 mb-8">
+                <h3 class="text-xl font-bold mb-6" style="color: var(--primary)">فعالیت‌های اخیر</h3>
+                <div id="recentActivity" class="space-y-4">
+                    <div class="text-center py-8 opacity-50">
+                        <div class="text-4xl mb-4">📝</div>
+                        <p>هنوز فعالیتی ثبت نشده است</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card rounded-2xl p-6 text-center hover:scale-105 transition-transform cursor-pointer" onclick="showSection('customers')">
+                    <div class="text-4xl mb-4">👥</div>
+                    <h4 class="text-lg font-bold mb-2">مشاهده مشتری‌ها</h4>
+                    <p class="text-sm opacity-75">لیست کامل مشتری‌ها و درخواست‌ها</p>
+                </div>
+                <div class="card rounded-2xl p-6 text-center hover:scale-105 transition-transform cursor-pointer" onclick="showSection('edit-site')">
+                    <div class="text-4xl mb-4">✏️</div>
+                    <h4 class="text-lg font-bold mb-2">ویرایش سایت</h4>
+                    <p class="text-sm opacity-75">تغییر محتوا و تنظیمات سایت</p>
+                </div>
+                <div class="card rounded-2xl p-6 text-center hover:scale-105 transition-transform cursor-pointer" onclick="exportData()">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h4 class="text-lg font-bold mb-2">خروجی داده</h4>
+                    <p class="text-sm opacity-75">دانلود اطلاعات مشتری‌ها</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customers Section -->
+        <section id="customers-section" class="p-6 hidden">
+            <div class="card rounded-2xl p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold" style="color: var(--primary)">لیست مشتری‌ها</h3>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <button onclick="refreshCustomers()" class="btn-primary px-4 py-2 rounded-lg text-sm">
+                            🔄 بروزرسانی
+                        </button>
+                        <button onclick="clearAllCustomers()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition-colors">
+                            🗑️ پاک کردن همه
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b" style="border-color: var(--border);">
+                                <th class="text-right py-3 px-4">نام</th>
+                                <th class="text-right py-3 px-4">شماره تماس</th>
+                                <th class="text-right py-3 px-4">ایمیل</th>
+                                <th class="text-right py-3 px-4">خدمات</th>
+                                <th class="text-right py-3 px-4">تاریخ</th>
+                                <th class="text-right py-3 px-4">وضعیت</th>
+                                <th class="text-right py-3 px-4">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTable">
+                            <tr>
+                                <td colspan="7" class="text-center py-8 opacity-50">
+                                    <div class="text-4xl mb-4">👥</div>
+                                    <p>هنوز مشتری‌ای ثبت نشده است</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edit Site Section -->
+        <section id="edit-site-section" class="p-6 hidden">
+            <div class="card rounded-2xl p-6">
+                <h3 class="text-xl font-bold mb-6" style="color: var(--primary)">ویرایش محتوای سایت</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">عنوان سایت</label>
+                        <input type="text" id="siteTitle" class="w-full px-4 py-3 rounded-xl border-2" style="border-color: var(--border); background: var(--card-bg); color: var(--text);" placeholder="عنوان سایت">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">توضیحات سایت</label>
+                        <textarea id="siteDescription" rows="3" class="w-full px-4 py-3 rounded-xl border-2 resize-none" style="border-color: var(--border); background: var(--card-bg); color: var(--text);" placeholder="توضیحات سایت"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">شماره تماس</label>
+                        <input type="text" id="contactPhone" class="w-full px-4 py-3 rounded-xl border-2" style="border-color: var(--border); background: var(--card-bg); color: var(--text);" placeholder="شماره تماس">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">ایمیل</label>
+                        <input type="email" id="contactEmail" class="w-full px-4 py-3 rounded-xl border-2" style="border-color: var(--border); background: var(--card-bg); color: var(--text);" placeholder="ایمیل">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">آدرس</label>
+                        <input type="text" id="contactAddress" class="w-full px-4 py-3 rounded-xl border-2" style="border-color: var(--border); background: var(--card-bg); color: var(--text);" placeholder="آدرس">
+                    </div>
+                    <button onclick="saveSiteSettings()" class="btn-primary px-6 py-3 rounded-xl font-bold">
+                        💾 ذخیره تغییرات
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="p-6 hidden">
+            <div class="card rounded-2xl p-6">
+                <h3 class="text-xl font-bold mb-6" style="color: var(--primary)">تنظیمات سیستم</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">رمز عبور جدید</label>
+                        <input type="password" id="newPassword" class="w-full px-4 py-3 rounded-xl border-2" style="border-color: var(--border); background: var(--card-bg); color: var(--text);" placeholder="رمز عبور جدید">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">تأیید رمز عبور</label>
+                        <input type="password" id="confirmPassword" class="w-full px-4 py-3 rounded-xl border-2" style="border-color: var(--border); background: var(--card-bg); color: var(--text);" placeholder="تأیید رمز عبور">
+                    </div>
+                    <button onclick="changePassword()" class="btn-primary px-6 py-3 rounded-xl font-bold">
+                        🔐 تغییر رمز عبور
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Check authentication
+        window.addEventListener('load', function() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            const loginTime = localStorage.getItem('adminLoginTime');
+            
+            if (!isLoggedIn || !loginTime) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            const loginDate = new Date(loginTime);
+            const now = new Date();
+            const hoursDiff = (now - loginDate) / (1000 * 60 * 60);
+            
+            if (hoursDiff >= 24) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminLoginTime');
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Load data
+            loadCustomers();
+            loadSiteSettings();
+            updateStats();
+        });
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                themeIcon.innerHTML = '<path d="M12,18.5A6.5,6.5 0 0,1 5.5,12A6.5,6.5 0 0,1 12,5.5A6.5,6.5 0 0,1 18.5,12A6.5,6.5 0 0,1 12,18.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>';
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                themeIcon.innerHTML = '<path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>';
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('[id$="-section"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('bg-white', 'bg-opacity-20');
+            });
+            event.target.closest('.nav-item').classList.add('bg-white', 'bg-opacity-20');
+        }
+
+        function loadCustomers() {
+            const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+            const tableBody = document.getElementById('customersTable');
+            
+            if (customers.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-8 opacity-50">
+                            <div class="text-4xl mb-4">👥</div>
+                            <p>هنوز مشتری‌ای ثبت نشده است</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = customers.map((customer, index) => `
+                <tr class="customer-row border-b" style="border-color: var(--border);">
+                    <td class="py-3 px-4">${customer.name}</td>
+                    <td class="py-3 px-4">${customer.phone}</td>
+                    <td class="py-3 px-4">${customer.email}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex flex-wrap gap-1">
+                            ${customer.services.map(service => `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${service}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">${new Date(customer.date).toLocaleDateString('fa-IR')}</td>
+                    <td class="py-3 px-4">
+                        <span class="status-badge status-new">جدید</span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <button onclick="contactCustomer('${customer.phone}')" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition-colors">
+                            📞 تماس
+                        </button>
+                        <button onclick="deleteCustomer(${index})" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition-colors mr-2">
+                            🗑️ حذف
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+            const today = new Date().toDateString();
+            
+            const totalCustomers = customers.length;
+            const newRequests = customers.filter(c => new Date(c.date).toDateString() === today).length;
+            const todayContacts = customers.filter(c => c.status === 'contacted' && new Date(c.lastContact).toDateString() === today).length;
+            const completedProjects = customers.filter(c => c.status === 'completed').length;
+            
+            document.getElementById('totalCustomers').textContent = totalCustomers;
+            document.getElementById('newRequests').textContent = newRequests;
+            document.getElementById('todayContacts').textContent = todayContacts;
+            document.getElementById('completedProjects').textContent = completedProjects;
+            document.getElementById('customerCount').textContent = totalCustomers;
+        }
+
+        function refreshCustomers() {
+            loadCustomers();
+            updateStats();
+            showMessage('لیست مشتری‌ها بروزرسانی شد', 'success');
+        }
+
+        function contactCustomer(phone) {
+            if (confirm(`آیا می‌خواهید با شماره ${phone} تماس بگیرید؟`)) {
+                window.open(`tel:${phone}`);
+                showMessage('تماس برقرار شد', 'success');
+            }
+        }
+
+        function deleteCustomer(index) {
+            if (confirm('آیا مطمئن هستید که می‌خواهید این مشتری را حذف کنید؟')) {
+                const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+                customers.splice(index, 1);
+                localStorage.setItem('customers', JSON.stringify(customers));
+                loadCustomers();
+                updateStats();
+                showMessage('مشتری حذف شد', 'success');
+            }
+        }
+
+        function clearAllCustomers() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید همه مشتری‌ها را حذف کنید؟ این عمل قابل بازگشت نیست!')) {
+                localStorage.removeItem('customers');
+                loadCustomers();
+                updateStats();
+                showMessage('همه مشتری‌ها حذف شدند', 'success');
+            }
+        }
+
+        function loadSiteSettings() {
+            const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
+            
+            document.getElementById('siteTitle').value = settings.title || 'جوان نویسان - ایده های نو با کدهای نو';
+            document.getElementById('siteDescription').value = settings.description || 'از ایده تا پیاده‌سازی، همراه شما هستیم';
+            document.getElementById('contactPhone').value = settings.phone || '09368169028';
+            document.getElementById('contactEmail').value = settings.email || 'ebrahimierfan@gmail.com';
+            document.getElementById('contactAddress').value = settings.address || 'اردبیل، خیابان کارشناسان';
+        }
+
+        function saveSiteSettings() {
+            const settings = {
+                title: document.getElementById('siteTitle').value,
+                description: document.getElementById('siteDescription').value,
+                phone: document.getElementById('contactPhone').value,
+                email: document.getElementById('contactEmail').value,
+                address: document.getElementById('contactAddress').value
+            };
+            
+            localStorage.setItem('siteSettings', JSON.stringify(settings));
+            showMessage('تنظیمات سایت ذخیره شد', 'success');
+        }
+
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showMessage('رمزهای عبور مطابقت ندارند', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showMessage('رمز عبور باید حداقل ۶ کاراکتر باشد', 'error');
+                return;
+            }
+            
+            localStorage.setItem('adminPassword', newPassword);
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            showMessage('رمز عبور تغییر کرد', 'success');
+        }
+
+        function exportData() {
+            const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+            const dataStr = JSON.stringify(customers, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `customers-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showMessage('داده‌ها دانلود شد', 'success');
+        }
+
+        function logout() {
+            if (confirm('آیا می‌خواهید از پنل مدیریت خارج شوید؟')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminLoginTime');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `fixed top-4 right-4 px-6 py-3 rounded-xl shadow-lg z-50 slide-in ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            messageDiv.innerHTML = `
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <span>${type === 'success' ? '✅' : '❌'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            updateStats();
+        }, 30000);
+    </script>
+</body>
+</html>
