@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود به پنل مدیریت - جوان نویسان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        :root {
+            --primary-light: #14b8a6;
+            --secondary-light: #ffffff;
+            --bg-light: #f8fafc;
+            --text-light: #1e293b;
+            --primary-dark: #8b5cf6;
+            --secondary-dark: #1e1b4b;
+            --bg-dark: #0f0f23;
+            --text-dark: #e2e8f0;
+        }
+        
+        .light-mode {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --bg: var(--bg-light);
+            --text: var(--text-light);
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+        
+        .dark-mode {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --bg: var(--bg-dark);
+            --text: var(--text-dark);
+            --card-bg: #1e1b4b;
+            --border: #374151;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo-bubble {
+            position: relative;
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+            animation: bubble-float 4s ease-in-out infinite, bubble-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes bubble-float {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+            }
+            25% { 
+                transform: translateY(-8px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(20, 184, 166, 0.6);
+            }
+            50% { 
+                transform: translateY(-12px) scale(1.1);
+                box-shadow: 0 12px 30px rgba(20, 184, 166, 0.8);
+            }
+            75% { 
+                transform: translateY(-8px) scale(1.05);
+                box-shadow: 0 8px 25px rgba(20, 184, 166, 0.6);
+            }
+        }
+        
+        @keyframes bubble-glow {
+            0% { 
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            100% { 
+                box-shadow: 0 0 40px rgba(20, 184, 166, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.3);
+            }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+        
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 opacity-5">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grid\" width=\"10\" height=\"10\" patternUnits=\"userSpaceOnUse\"><path d=\"M 10 0 L 0 0 0 10\" fill=\"none\" stroke=\"%23000\" stroke-width=\"0.5\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grid)\"/></svg>');"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="min-h-screen flex items-center justify-center p-4 relative z-10">
+        <div class="w-full max-w-md">
+            <!-- Logo Section -->
+            <div class="text-center mb-8">
+                <div class="logo-bubble w-20 h-20 mx-auto rounded-full gradient-bg flex items-center justify-center floating relative overflow-hidden mb-4">
+                    <img src="https://i.postimg.cc/9znrzT3Y/logo.png" alt="جوان نویسان" class="w-14 h-14 rounded-full object-cover animate-pulse" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="w-10 h-10 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+                    </svg>
+                    <div class="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-spin-slow"></div>
+                </div>
+                <h1 class="text-3xl font-bold mb-2" style="color: var(--primary)">جوان نویسان</h1>
+                <p class="text-lg opacity-75 mb-2">پنل مدیریت</p>
+                <div class="w-16 h-1 mx-auto gradient-bg rounded-full"></div>
+            </div>
+
+            <!-- Login Form -->
+            <div class="card rounded-3xl p-8 shadow-2xl slide-in">
+                <div class="text-center mb-6">
+                    <div class="text-4xl mb-4">🔐</div>
+                    <h2 class="text-2xl font-bold mb-2" style="color: var(--primary)">ورود به پنل مدیریت</h2>
+                    <p class="opacity-75 text-sm">لطفاً رمز عبور خود را وارد کنید</p>
+                </div>
+
+                <form id="loginForm" class="space-y-6">
+                    <div class="form-group">
+                        <label class="block text-sm font-medium mb-2" style="color: var(--primary)">
+                            🔑 رمز عبور
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="password" required
+                                class="w-full px-4 py-3 pr-12 rounded-xl border-2 transition-all duration-300 focus:scale-105 focus:shadow-lg"
+                                style="border-color: var(--border); background: var(--card-bg); color: var(--text);"
+                                placeholder="رمز عبور را وارد کنید">
+                            <button type="button" onclick="togglePassword()" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="loginBtn"
+                        class="w-full btn-primary px-6 py-3 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 shadow-lg">
+                        <span id="loginText">🚀 ورود به پنل</span>
+                        <span id="loadingText" class="hidden">⏳ در حال ورود...</span>
+                    </button>
+                </form>
+
+                <!-- Theme Toggle -->
+                <div class="text-center mt-6">
+                    <button onclick="toggleTheme()" class="p-3 rounded-full card hover:scale-110 transition-transform" aria-label="تغییر تم">
+                        <svg id="theme-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Back to Site -->
+                <div class="text-center mt-4">
+                    <a href="index.html" class="text-sm opacity-75 hover:opacity-100 transition-opacity">
+                        ← بازگشت به سایت اصلی
+                    </a>
+                </div>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="text-center mt-6">
+                <div class="inline-flex items-center space-x-2 space-x-reverse text-xs opacity-60">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11H16V16H8V11H9.2V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"/>
+                    </svg>
+                    <span>اتصال امن و رمزگذاری شده</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'erfan9028@';
+        
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                themeIcon.innerHTML = '<path d="M12,18.5A6.5,6.5 0 0,1 5.5,12A6.5,6.5 0 0,1 12,5.5A6.5,6.5 0 0,1 18.5,12A6.5,6.5 0 0,1 12,18.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>';
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                themeIcon.innerHTML = '<path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>';
+            }
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+            }
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const loginText = document.getElementById('loginText');
+            const loadingText = document.getElementById('loadingText');
+            
+            // Show loading state
+            loginText.classList.add('hidden');
+            loadingText.classList.remove('hidden');
+            loginBtn.disabled = true;
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                if (password === ADMIN_PASSWORD) {
+                    // Store admin session
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    localStorage.setItem('adminLoginTime', new Date().toISOString());
+                    
+                    // Redirect to admin dashboard
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    // Show error
+                    const passwordInput = document.getElementById('password');
+                    passwordInput.classList.add('shake');
+                    passwordInput.style.borderColor = '#ef4444';
+                    passwordInput.value = '';
+                    
+                    // Show error message
+                    showErrorMessage('رمز عبور اشتباه است!');
+                    
+                    // Reset button state
+                    loginText.classList.remove('hidden');
+                    loadingText.classList.add('hidden');
+                    loginBtn.disabled = false;
+                    
+                    // Remove shake animation
+                    setTimeout(() => {
+                        passwordInput.classList.remove('shake');
+                        passwordInput.style.borderColor = 'var(--border)';
+                    }, 500);
+                }
+            }, 1000);
+        });
+
+        function showErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 slide-in';
+            errorDiv.innerHTML = `
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6Z"/>
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 3000);
+        }
+
+        // Check if already logged in
+        window.addEventListener('load', function() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            const loginTime = localStorage.getItem('adminLoginTime');
+            
+            if (isLoggedIn && loginTime) {
+                const loginDate = new Date(loginTime);
+                const now = new Date();
+                const hoursDiff = (now - loginDate) / (1000 * 60 * 60);
+                
+                // Session expires after 24 hours
+                if (hoursDiff < 24) {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    localStorage.removeItem('adminLoggedIn');
+                    localStorage.removeItem('adminLoginTime');
+                }
+            }
+        });
+
+        // Add input focus animations
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary)';
+                this.style.boxShadow = '0 0 0 3px rgba(20, 184, 166, 0.1)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.borderColor = 'var(--border)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
