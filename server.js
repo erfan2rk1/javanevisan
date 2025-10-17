@@ -8,6 +8,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import nodemailer from 'nodemailer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -80,6 +81,30 @@ app.use(
     }),
   })
 );
+
+// Email transporter (optional - configure via env)
+const smtpHost = process.env.SMTP_HOST;
+const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
+const smtpSecure = (process.env.SMTP_SECURE || 'false') === 'true';
+const smtpUser = process.env.SMTP_USER;
+const smtpPass = process.env.SMTP_PASS;
+const CONTACT_TO = process.env.CONTACT_TO || process.env.SMTP_TO || '';
+
+let mailer = null;
+if (smtpHost && smtpUser && smtpPass) {
+  mailer = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    auth: { user: smtpUser, pass: smtpPass },
+  });
+  // Verify in background
+  mailer.verify().then(() => {
+    console.log('SMTP ready');
+  }).catch((e) => {
+    console.warn('SMTP verify failed:', e.message);
+  });
+}
 
 // Track visits middleware (before static to capture / requests)
 app.use((req, res, next) => {
@@ -173,6 +198,32 @@ app.post('/api/submit', (req, res) => {
 
   db.prepare(`INSERT INTO submissions (name, phone, email, services, message, customer_number, submission_date) VALUES (?, ?, ?, ?, ?, ?, ?)`)
     .run(name || '', phone || '', email || '', servicesCsv, message || '', customerNumber, submissionDate);
+
+  // send notification email asynchronously (if configured)
+  try {
+    if (mailer && CONTACT_TO) {
+      const fromAddr = process.env.SMTP_FROM || smtpUser;
+      const subject = `New contact (#${customerNumber}) - ${name || ''}`.trim();
+      const text = `Name: ${name || ''}\nPhone: ${phone || ''}\nEmail: ${email || ''}\nServices: ${servicesCsv || '-'}\nMessage:\n${message || ''}\n\nCustomer No: ${customerNumber}\nDate: ${submissionDate}`;
+      const html = `
+        <h3>New Contact</h3>
+        <p><strong>Name:</strong> ${name || ''}</p>
+        <p><strong>Phone:</strong> ${phone || ''}</p>
+        <p><strong>Email:</strong> ${email || ''}</p>
+        <p><strong>Services:</strong> ${servicesCsv || '-'}</p>
+        <p><strong>Message:</strong><br>${(message || '').replace(/\n/g, '<br>')}</p>
+        <hr>
+        <p>Customer No: <strong>${customerNumber}</strong></p>
+        <p>Date: ${submissionDate}</p>
+      `;
+      // Fire and forget
+      mailer.sendMail({ from: fromAddr, to: CONTACT_TO, subject, text, html }).catch((e) => {
+        console.warn('Email send failed:', e.message);
+      });
+    }
+  } catch (e) {
+    console.warn('Email error:', e.message);
+  }
 
   res.json({ ok: true, customerNumber, submissionDate });
 });
