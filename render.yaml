@@ -10,6 +10,22 @@ services:
         value: production
       - key: SESSION_SECRET
         generateValue: true
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+        sync: false
+      - key: SMTP_SECURE
+        value: "false"
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: CONTACT_TO
+        sync: false
     disk:
       name: data
       mountPath: /opt/render/project/src/data
