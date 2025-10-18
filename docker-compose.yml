@@ -7,6 +7,13 @@ services:
     environment:
       - NODE_ENV=production
       - SESSION_SECRET=change_this_secret
+      - SMTP_HOST=
+      - SMTP_PORT=587
+      - SMTP_SECURE=false
+      - SMTP_USER=
+      - SMTP_PASS=
+      - SMTP_FROM=
+      - CONTACT_TO=
     volumes:
       - ./data:/app/data
     restart: unless-stopped

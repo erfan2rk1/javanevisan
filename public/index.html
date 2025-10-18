@@ -3,21 +3,204 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>جوان نویسان - ایده های نو با کدهای نو</title>
+  <title>پیشرو فناوران همراه‌نگار برتر</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>body{box-sizing:border-box}</style>
 </head>
 <body class="light-mode">
-  <!-- The landing page is loaded from .landing.html for easier admin editing -->
   <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    // Inject the user-provided HTML into #app to keep edits simple
-    fetch('/landing.html').then(r => r.text()).then(html => {
-      document.getElementById('app').innerHTML = html;
-      wireForm();
-    });
+    const i18n = {
+      fa: {
+        brand: 'پیشرو فناوران همراه‌نگار برتر',
+        tagline: 'از ایده تا تجاری‌سازی، همراه شما هستیم',
+        nav_services: 'خدمات',
+        nav_about: 'درباره ما',
+        nav_contact: 'تماس',
+        slogan: 'از ایده تا تجاری‌سازی، همراه شما هستیم',
+        hero_sub: 'راهکارهای نرم‌افزار، وب، اپلیکیشن و هوش مصنوعی',
+        services_title: 'خدمات ما',
+        services_sub: 'پوشش کامل از ایده تا تجاری‌سازی',
+        svc_dev_t: 'خدمات توسعه نرم‌افزار',
+        svc_dev_d: 'طراحی و پیاده‌سازی سیستم‌های مقیاس‌پذیر',
+        svc_web_t: 'طراحی وب‌سایت و اپلیکیشن',
+        svc_web_d: 'وب‌سایت و اپلیکیشن‌های مدرن و واکنش‌گرا',
+        svc_ai_t: 'خدمات هوش مصنوعی',
+        svc_ai_d: 'تحلیل داده، یادگیری ماشین و اتوماسیون',
+        svc_park_t: 'مشاوره پذیرش در پارک‌ها و مراکز رشد',
+        svc_park_d: 'همراهی در مسیر پذیرش و استقرار',
+        svc_brand_t: 'ثبت برند صنعتی',
+        svc_brand_d: 'حفظ هویت تجاری با ثبت رسمی',
+        svc_patent_t: 'مشاوره ثبت اختراع و پتنت بین‌المللی',
+        svc_patent_d: 'راهنمایی تخصصی از ایده تا ثبت',
+        about_title: 'درباره ما',
+        about_p1: 'ما تیمی از متخصصان فناوری هستیم که از ایده تا تجاری‌سازی کنار شما می‌مانیم.',
+        about_p2: 'با تمرکز بر کیفیت، مقیاس‌پذیری و نوآوری، کسب‌وکار شما را برای آینده آماده می‌کنیم.',
+        ceo_intro: 'مدیرعامل: شهید فرضی‌زاده',
+        ceo_name: 'Shaheed Farzi Zadeh',
+        ceo_bio: 'کارآفرین و مدیر ارشد فناوری با تجربه حرفه‌ای در توسعه نرم‌افزار، راهبری تیم‌های فنی و انتقال فناوری.',
+        ceo_caption: 'معرفی کوتاه مدیرعامل',
+        contact_title: 'تماس با ما',
+        contact_sub: 'فرم زیر را تکمیل کنید تا در کوتاه‌ترین زمان با شما تماس بگیریم',
+        label_name: 'نام',
+        label_phone: 'شماره تماس',
+        label_email: 'ایمیل',
+        label_message: 'پیام',
+        btn_submit: 'ارسال',
+        btn_sending: 'در حال ارسال...',
+        footer: '© 2025 پیشرو فناوران همراه‌نگار برتر',
+        alert_success: 'ثبت شد! شماره مشتری: ',
+        alert_error: 'خطا در ارسال فرم',
+        alert_connect_error: 'خطا در اتصال به سرور'
+      },
+      en: {
+        brand: 'Pishro Fanavaran Hamrah Negar Bartar',
+        tagline: 'From idea to commercialization, we are with you',
+        nav_services: 'Services',
+        nav_about: 'About',
+        nav_contact: 'Contact',
+        slogan: 'From idea to commercialization, we are with you',
+        hero_sub: 'Software, web, app, and AI solutions',
+        services_title: 'Our Services',
+        services_sub: 'End-to-end from idea to commercialization',
+        svc_dev_t: 'Software Development',
+        svc_dev_d: 'Design and build scalable systems',
+        svc_web_t: 'Website and App Design',
+        svc_web_d: 'Modern, responsive websites and apps',
+        svc_ai_t: 'Artificial Intelligence',
+        svc_ai_d: 'Data analysis, ML, and automation',
+        svc_park_t: 'Consulting for Science/Tech Parks & Incubators',
+        svc_park_d: 'Guidance through acceptance and setup',
+        svc_brand_t: 'Industrial Brand Registration',
+        svc_brand_d: 'Protect your identity with official registration',
+        svc_patent_t: 'International Patent & Invention Consulting',
+        svc_patent_d: 'Expert guidance from idea to filing',
+        about_title: 'About Us',
+        about_p1: 'A team of technology experts staying with you from idea to market.',
+        about_p2: 'We focus on quality, scalability, and innovation to future‑proof your business.',
+        ceo_intro: 'CEO: Shaheed Farzi Zadeh',
+        ceo_name: 'Shaheed Farzi Zadeh',
+        ceo_bio: 'Entrepreneur and CTO with professional experience in software engineering, technical leadership, and tech transfer.',
+        ceo_caption: 'CEO short bio',
+        contact_title: 'Contact Us',
+        contact_sub: "Fill the form and we'll reach out shortly",
+        label_name: 'Name',
+        label_phone: 'Phone',
+        label_email: 'Email',
+        label_message: 'Message',
+        btn_submit: 'Submit',
+        btn_sending: 'Sending...',
+        footer: '© 2025 Pishro Fanavaran Hamrah Negar Bartar',
+        alert_success: 'Submitted! Customer No: ',
+        alert_error: 'Error submitting form',
+        alert_connect_error: 'Server connection error'
+      },
+      ar: {
+        brand: 'بيشرو فناوران همراه‌نگار برتر',
+        tagline: 'من الفكرة إلى التسويق التجاري، نحن معكم',
+        nav_services: 'الخدمات',
+        nav_about: 'نبذة عنا',
+        nav_contact: 'اتصل بنا',
+        slogan: 'من الفكرة إلى التسويق التجاري، نحن معكم',
+        hero_sub: 'حلول البرمجيات والويب والتطبيقات والذكاء الاصطناعي',
+        services_title: 'خدماتنا',
+        services_sub: 'تغطية كاملة من الفكرة إلى التسويق',
+        svc_dev_t: 'تطوير البرمجيات',
+        svc_dev_d: 'تصميم وبناء أنظمة قابلة للتوسع',
+        svc_web_t: 'تصميم المواقع والتطبيقات',
+        svc_web_d: 'مواقع وتطبيقات حديثة ومتجاوبة',
+        svc_ai_t: 'الذكاء الاصطناعي',
+        svc_ai_d: 'تحليل البيانات والتعلم الآلي والأتمتة',
+        svc_park_t: 'استشارات للقبول في حدائق ومسرّعات التقنية',
+        svc_park_d: 'مرافقة في مسار القبول والاستقرار',
+        svc_brand_t: 'تسجيل العلامة الصناعية',
+        svc_brand_d: 'حماية الهوية التجارية بالتسجيل الرسمي',
+        svc_patent_t: 'استشارات براءات الاختراع الدولية',
+        svc_patent_d: 'إرشاد متخصص من الفكرة إلى الإيداع',
+        about_title: 'من نحن',
+        about_p1: 'فريق من خبراء التقنية يرافقكم من الفكرة إلى السوق.',
+        about_p2: 'نركز على الجودة والقابلية للتوسع والابتكار لتهيئة عملكم للمستقبل.',
+        ceo_intro: 'المدير التنفيذي: شهيد فرضي زاده',
+        ceo_name: 'Shaheed Farzi Zadeh',
+        ceo_bio: 'رائد أعمال ومدير تقني بخبرة في تطوير البرمجيات وقيادة الفرق ونقل التقنية.',
+        ceo_caption: 'نبذة مختصرة عن المدير التنفيذي',
+        contact_title: 'اتصل بنا',
+        contact_sub: 'املأ النموذج وسنتواصل معك قريبًا',
+        label_name: 'الاسم',
+        label_phone: 'الهاتف',
+        label_email: 'البريد الإلكتروني',
+        label_message: 'الرسالة',
+        btn_submit: 'إرسال',
+        btn_sending: 'جارٍ الإرسال...',
+        footer: '© 2025 بيشرو فناوران همراه‌نگار برتر',
+        alert_success: 'تم الإرسال! رقم العميل: ',
+        alert_error: 'خطأ في إرسال النموذج',
+        alert_connect_error: 'خطأ في الاتصال بالخادم'
+      }
+    };
 
-    // Rewire the form to submit to our backend
+    function setLanguage(lang) {
+      const dict = i18n[lang] || i18n.fa;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) el.textContent = dict[key];
+      });
+      // Activate selected chip
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.dataset.lang === lang) btn.classList.add('active'); else btn.classList.remove('active');
+      });
+      localStorage.setItem('lang', lang);
+    }
+
+    function initLanguage() {
+      // Buttons live inside landing.html; set listeners after injection
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+      });
+      setLanguage(localStorage.getItem('lang') || 'fa');
+    }
+
+    function applyTheme(theme) {
+      const body = document.body;
+      const themeIcon = document.getElementById('theme-icon');
+      if (theme === 'dark') {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+        if (themeIcon) themeIcon.innerHTML = '<path d="M12,18.5A6.5,6.5 0 0,1 5.5,12A6.5,6.5 0 0,1 12,5.5A6.5,6.5 0 0,1 18.5,12A6.5,6.5 0 0,1 12,18.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>';
+      } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        if (themeIcon) themeIcon.innerHTML = '<path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>';
+      }
+    }
+
+    // Global toggle for landing.html button
+    window.toggleTheme = function() {
+      const next = document.body.classList.contains('light-mode') ? 'dark' : 'light';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+    }
+
+    function initTheme() {
+      applyTheme(localStorage.getItem('theme') || 'light');
+    }
+
+    function initSwiper() {
+      if (!window.Swiper) return;
+      const el = document.querySelector('.mySwiper');
+      if (!el) return;
+      new Swiper('.mySwiper', {
+        loop: true,
+        autoplay: { delay: 3500, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      });
+    }
+
     function wireForm() {
       const form = document.getElementById('registrationForm');
       if (!form) return;
@@ -29,19 +212,15 @@
         const loadingText = document.getElementById('loadingText');
         submitText?.classList.add('hidden');
         loadingText?.classList.remove('hidden');
-        submitBtn && (submitBtn.disabled = true);
+        if (submitBtn) submitBtn.disabled = true;
 
         const formData = new FormData(form);
-        const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(i => i.value);
-        if (services.length === 0) {
-          alert('لطفاً حداقل یک خدمت انتخاب کنید');
-          submitText?.classList.remove('hidden');
-          loadingText?.classList.add('hidden');
-          submitBtn && (submitBtn.disabled = false);
-          return;
-        }
         const payload = Object.fromEntries(formData.entries());
-        payload.services = services;
+        // Optional services
+        const svcInputs = document.querySelectorAll('input[name="services"]:checked');
+        if (svcInputs && svcInputs.length) {
+          payload.services = Array.from(svcInputs).map(i => i.value);
+        }
 
         try {
           const res = await fetch('/api/submit', {
@@ -49,40 +228,33 @@
           });
           const data = await res.json();
           if (data.ok) {
-            alert('ثبت شد! شماره مشتری: ' + data.customerNumber);
+            alert((i18n[localStorage.getItem('lang') || 'fa'].alert_success) + data.customerNumber);
             form.reset();
           } else {
-            alert('خطا در ارسال فرم');
+            alert(i18n[localStorage.getItem('lang') || 'fa'].alert_error);
           }
         } catch (err) {
-          alert('خطا در اتصال به سرور');
+          alert(i18n[localStorage.getItem('lang') || 'fa'].alert_connect_error);
         } finally {
           submitText?.classList.remove('hidden');
           loadingText?.classList.add('hidden');
-          submitBtn && (submitBtn.disabled = false);
+          if (submitBtn) submitBtn.disabled = false;
         }
       });
     }
-    // Expose helpers used by the page
-    window.scrollToForm = function() {
-      const form = document.getElementById('registrationForm');
-      if (form) {
-        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+
+    function initSite() {
+      initTheme();
+      initLanguage();
+      initSwiper();
+      wireForm();
     }
-    window.toggleTheme = function() {
-      const body = document.body;
-      const themeIcon = document.getElementById('theme-icon');
-      if (body.classList.contains('light-mode')) {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-        if (themeIcon) themeIcon.innerHTML = '<path d="M12,18.5A6.5,6.5 0 0,1 5.5,12A6.5,6.5 0 0,1 12,5.5A6.5,6.5 0 0,1 18.5,12A6.5,6.5 0 0,1 12,18.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>';
-      } else {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-        if (themeIcon) themeIcon.innerHTML = '<path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>';
-      }
-    }
+
+    // Load landing HTML and enhance
+    fetch('/landing.html').then(r => r.text()).then(html => {
+      document.getElementById('app').innerHTML = html;
+      initSite();
+    });
   </script>
 </body>
 </html>
